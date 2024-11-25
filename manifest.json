@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Tab Lock",
+  "version": "1.0",
+  "description": "Lock yourself into a single browser tab for focused work or studying.",
+  "permissions": ["tabs", "storage", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html"
+}
