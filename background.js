@@ -22,11 +22,21 @@ function startFocusTimer(duration) {
 }
 
 function endFocusMode() {
-  focusTabId = null;
-  clearTimeout(timer);
-  chrome.action.setBadgeText({ text: "OFF" });
-  chrome.runtime.sendMessage({ action: "focusEnded" });
-}
+    focusTabId = null;
+    clearTimeout(timer);
+    chrome.action.setBadgeText({ text: "OFF" });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs.length > 0) {
+        const activeTab = tabs[0];
+        chrome.runtime.sendMessage({ action: "focusEnded" }, (response) => {
+          if (chrome.runtime.lastError) {
+            console.warn("Message could not be delivered:", chrome.runtime.lastError.message);
+          }
+        });
+      }
+    });
+  }
+  
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
   if (focusTabId && activeInfo.tabId !== focusTabId) {
